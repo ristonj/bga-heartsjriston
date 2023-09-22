@@ -1,18 +1,33 @@
-on: push
-name: Publish Website over SFTP
+name: Deploy via SFTP
+on:
+  push:
+    branches:
+      - main
 jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
-    - uses: actions/checkout@v2.1.0
-      with:
-        fetch-depth: 2
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-    - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@3.1.2
-      with:
-        ftp-server: sftp://1.studio.boardgamearena.com/heartsjriston
-        ftp-username: ristonj
-        ftp-password: ${{ secrets.BGA_SFTP_PASSWORD }}
-        git-ftp-args: --insecure
+      - name: Deploy files via SFTP
+        uses: pressidium/lftp-mirror-action@v1
+        with:
+          # SFTP credentials
+          host: 1.studio.boardgamearena.com
+          port: 22
+          user: ristonj
+          pass: ${{ secrets.BGA_SFTP_PASSWORD }}
+          # lftp settings
+          onlyNewer: true
+          settings: 'sftp:auto-confirm=yes'
+          # Mirror command options
+          localDir: '.'
+          remoteDir: '/heartsjriston'
+          reverse: true
+          ignoreFile: '.lftp_ignore'
+          options: '--verbose'
