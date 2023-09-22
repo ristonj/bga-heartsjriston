@@ -12,7 +12,7 @@ jobs:
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@3.1.1
       with:
-        ftp-server: sftp://1.studio.boardgamearena.com/jriston/hearts
+        ftp-server: sftp://1.studio.boardgamearena.com/heartsjriston
         ftp-username: ristonj
         ftp-password: ${{ secrets.BGA_SFTP_PASSWORD }}
         git-ftp-args: --insecure
