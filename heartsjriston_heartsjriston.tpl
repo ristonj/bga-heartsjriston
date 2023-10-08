@@ -28,6 +28,8 @@
 
 This is your game interface. You can edit this HTML in your ".tpl" file.
 
+Hello, BGA.
+
 
 <script type="text/javascript">
 
