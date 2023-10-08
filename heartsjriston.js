@@ -18,12 +18,15 @@
 define([
     "dojo","dojo/_base/declare",
     "ebg/core/gamegui",
-    "ebg/counter"
+    "ebg/counter",
+    "ebg/stock"
 ],
 function (dojo, declare) {
     return declare("bgagame.heartsjriston", ebg.core.gamegui, {
         constructor: function(){
-            console.log('heartsjriston constructor');
+            console.log('hearts constructor');
+            this.cardwidth = 72;
+            this.cardheight = 96;
               
             // Here, you can init the global variables of your user interface
             // Example:
@@ -57,7 +60,10 @@ function (dojo, declare) {
             }
             
             // TODO: Set up your game interface here, according to "gamedatas"
-            
+
+            //Player Hand
+            this.playerHand = new ebg.stock(); // new stock object for hand
+            this.playerHand.create( this, $('myhand'), this.cardwidth, this.cardheight );
  
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
