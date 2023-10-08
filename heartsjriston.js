@@ -76,6 +76,7 @@ function (dojo, declare) {
                 }
             }
             this.playerHand.addToStockWithId( this.getCardUniqueId( 2, 5 ), 42 );
+            dojo.connect( this.playerHand, 'onChangeSelection', this, 'onPlayerHandSelectionChanged' );
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
 
@@ -194,6 +195,25 @@ function (dojo, declare) {
             _ make a call to the game server
         
         */
+
+        onPlayerHandSelectionChanged: function() {
+            var items = this.playerHand.getSelectedItems();
+
+            if (items.length > 0) {
+                if (this.checkAction('playCard', true)) {
+                    // Can play a card
+
+                    var card_id = items[0].id;
+                    console.log("on playCard "+card_id);
+
+                    this.playerHand.unselectAll();
+                } else if (this.checkAction('giveCards')) {
+                    // Can give cards => let the player select some cards
+                } else {
+                    this.playerHand.unselectAll();
+                }
+            }
+        },    
         
         /* Example:
         
