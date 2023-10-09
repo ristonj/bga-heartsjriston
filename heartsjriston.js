@@ -196,6 +196,10 @@ function (dojo, declare) {
             return (color - 1) * 13 + (value - 2);
         },
 
+        getColorFromId : function(id) {
+            return Math.floor(id / 13) + 1;
+        },
+
         playCardOnTable : function(player_id, color, value, card_id) {
             // player_id => direction
             dojo.place(this.format_block('jstpl_cardontable', {
@@ -244,7 +248,7 @@ function (dojo, declare) {
                 if (this.checkAction(action, true)) {
                     // Can play a card
                     var card_id = items[0].id;
-                    this.showMessage(_(items[0].type));                    
+                    this.showMessage(_(this.getColorFromId(card_id)));                    
                     this.ajaxcall("/" + this.game_name + "/" + this.game_name + "/" + action + ".html", {
                         id : card_id,
                         lock : true
