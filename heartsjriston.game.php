@@ -214,12 +214,21 @@ class heartsjriston extends Table
     function playCard($card_id) {
         self::checkAction("playCard");
         $player_id = self::getActivePlayerId();
-        $this->cards->moveCard($card_id, 'cardsontable', $player_id);
+        
         // XXX check rules here
         $currentCard = $this->cards->getCard($card_id);
         $currentTrickColor = self::getGameStateValue( 'trickColor' ) ;
-        if( $currentTrickColor == 0 )
-           self::setGameStateValue( 'trickColor', $currentCard['type'] );
+        if( $currentTrickColor == 0 ) {
+            if( ( $currentCard['type'] == 2 ) && ( self::getGameStateValue( 'alreadyPlayedHearts' ) == 0) ) {
+                $player_hand = $this->cards->getCardsInLocation( 'hand', $player_id );
+                if( count($player_hand) !== count(array_keys($player_hand, 2)) )
+                {
+                    throw new BgaException("Hearts have not been broken.");
+                }
+            }
+        }
+        self::setGameStateValue( 'trickColor', $currentCard['type'] );
+        $this->cards->moveCard($card_id, 'cardsontable', $player_id);
         // And notify
         self::notifyAllPlayers('playCard', clienttranslate('${player_name} plays ${value_displayed} ${color_displayed}'), array (
                 'i18n' => array ('color_displayed','value_displayed' ),'card_id' => $card_id,'player_id' => $player_id,
@@ -350,6 +359,7 @@ class heartsjriston extends Table
                 // End of the trick
                 $this->gamestate->nextState("nextTrick");
             }
+
         } else {
             // Standard case (not the end of the trick)
             // => just active the next player
@@ -366,13 +376,13 @@ class heartsjriston extends Table
 
         $player_to_points = array ();
         foreach ( $players as $player_id => $player ) {
-            $player_to_points [$player_id] = 0;
+            $player_to_points[$player_id] = 0;
         }
         $cards = $this->cards->getCardsInLocation("cardswon");
         foreach ( $cards as $card ) {
             $player_id = $card ['location_arg'];
             // Note: 2 = heart
-            if ($card ['type'] == 2) {
+            if ($card['type'] == 2) {
                 $player_to_points [$player_id] ++;
             }
         }
@@ -470,23 +480,23 @@ class heartsjriston extends Table
         // $from_version is equal to 1404301345
         
         // Example:
-//        if( $from_version <= 1404301345 )
-//        {
-//            // ! important ! Use DBPREFIX_<table_name> for all tables
-//
-//            $sql = "ALTER TABLE DBPREFIX_xxxxxxx ....";
-//            self::applyDbUpgradeToAllDB( $sql );
-//        }
-//        if( $from_version <= 1405061421 )
-//        {
-//            // ! important ! Use DBPREFIX_<table_name> for all tables
-//
-//            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
-//            self::applyDbUpgradeToAllDB( $sql );
-//        }
-//        // Please add your future database scheme changes here
-//
-//
+    //        if( $from_version <= 1404301345 )
+    //        {
+    //            // ! important ! Use DBPREFIX_<table_name> for all tables
+    //
+    //            $sql = "ALTER TABLE DBPREFIX_xxxxxxx ....";
+    //            self::applyDbUpgradeToAllDB( $sql );
+    //        }
+    //        if( $from_version <= 1405061421 )
+    //        {
+    //            // ! important ! Use DBPREFIX_<table_name> for all tables
+    //
+    //            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
+    //            self::applyDbUpgradeToAllDB( $sql );
+    //        }
+    //        // Please add your future database scheme changes here
+    //
+    //
 
 
     }    
