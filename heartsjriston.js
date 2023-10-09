@@ -244,7 +244,7 @@ function (dojo, declare) {
                 if (this.checkAction(action, true)) {
                     // Can play a card
                     var card_id = items[0].id;
-                    this.showMessage(_(items[0].color));                    
+                    this.showMessage(_(items[0].type));                    
                     this.ajaxcall("/" + this.game_name + "/" + this.game_name + "/" + action + ".html", {
                         id : card_id,
                         lock : true
