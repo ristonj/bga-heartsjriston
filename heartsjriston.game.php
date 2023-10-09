@@ -223,7 +223,7 @@ class heartsjriston extends Table
                 $player_hand = $this->cards->getCardsInLocation( 'hand', $player_id );
                 if( count($player_hand) !== count(array_keys($player_hand, 2)) )
                 {
-                    throw new BgaException("Hearts have not been broken.");
+                    throw new feException("Hearts have not been broken.");
                 }
             }
         }
