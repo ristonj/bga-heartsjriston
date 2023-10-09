@@ -246,6 +246,13 @@ function (dojo, declare) {
                     var card_id = items[0].id;
                     console.log("on playCard "+card_id);
 
+                    // type is (color - 1) * 13 + (value - 2)
+                    var type = items[0].type;
+                    var color = Math.floor(type / 13) + 1;
+                    var value = type % 13 + 2;
+                    
+                    this.playCardOnTable(this.player_id,color,value,card_id);
+
                     this.playerHand.unselectAll();
                 } else if (this.checkAction('giveCards')) {
                     // Can give cards => let the player select some cards
