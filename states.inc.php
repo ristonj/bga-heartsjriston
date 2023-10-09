@@ -58,11 +58,11 @@ $machinestates = array(
         "description" => "",
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => array( "" => 20 )
+        "transitions" => array( "" => 2 )
     ),
     
     /// New hand
-    20 => array(
+    2 => array(
         "name" => "newHand",
         "description" => "",
         "type" => "game",
@@ -123,7 +123,7 @@ $machinestates = array(
         "description" => "",
         "type" => "game",
         "action" => "stEndHand",
-        "transitions" => array( "nextHand" => 20, "endGame" => 99 )
+        "transitions" => array( "nextHand" => 2, "endGame" => 99 )
     ),     
    
     // Final state.
